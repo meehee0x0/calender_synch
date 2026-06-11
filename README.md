@@ -2,6 +2,10 @@
 
 A tool to synchronize calendar events across multiple platforms.
 
+## License
+
+MIT
+
 ## Features
 
 - Sync events between Google Calendar and Outlook
