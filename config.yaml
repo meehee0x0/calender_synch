@@ -1,0 +1,42 @@
+calendars:
+  layest:
+    name: "Layest Office 365"
+    type: o365
+    tenant_key: layest          # liest O365_LAYEST_* aus .env
+    account: michael.kuhn@layest.com
+    readonly: false
+
+  invester:
+    name: "Invester Office 365"
+    type: o365
+    tenant_key: invester
+    account: m.kuhn@invester.at
+    readonly: true
+    disabled: true              # Admin-Consent ausstehend
+
+  icloud:
+    name: "iCloud"
+    type: icloud
+    calendar_name: "P&M-Kalender"
+    readonly: false
+
+# Sync-Regeln
+rules:
+
+  - name: "Layest Randzeiten → iCloud"
+    source: layest
+    target: icloud
+    action: copy
+    subject_prefix: "Michi: "
+    filter:
+      time_outside:             # Termine VOR 9:00 oder NACH 17:00
+        start_hour: 9
+        end_hour: 17
+
+  - name: "iCloud sy-Termine → Layest (privat)"
+    source: icloud
+    target: layest
+    action: copy
+    private: true
+    filter:
+      subject_starts_with: "sy"  # Groß-/Kleinschreibung wird ignoriert
