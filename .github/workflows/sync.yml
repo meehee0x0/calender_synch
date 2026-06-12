@@ -1,0 +1,34 @@
+name: Calendar Sync
+
+on:
+  schedule:
+    # Montag 10:00 Uhr Wien (CEST = UTC+2 → 08:00 UTC)
+    - cron: "0 8 * * 1"
+  workflow_dispatch:  # Ermöglicht manuellen Start auf GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhängigkeiten installieren
+        run: pip install -r requirements.txt
+
+      - name: Kalender synchronisieren
+        env:
+          O365_LAYEST_CLIENT_ID: ${{ secrets.O365_LAYEST_CLIENT_ID }}
+          O365_LAYEST_CLIENT_SECRET: ${{ secrets.O365_LAYEST_CLIENT_SECRET }}
+          O365_LAYEST_TENANT_ID: ${{ secrets.O365_LAYEST_TENANT_ID }}
+          O365_LAYEST_ACCOUNT: ${{ secrets.O365_LAYEST_ACCOUNT }}
+          O365_INVESTER_CLIENT_ID: ${{ secrets.O365_INVESTER_CLIENT_ID }}
+          O365_INVESTER_CLIENT_SECRET: ${{ secrets.O365_INVESTER_CLIENT_SECRET }}
+          O365_INVESTER_TENANT_ID: ${{ secrets.O365_INVESTER_TENANT_ID }}
+          O365_INVESTER_ACCOUNT: ${{ secrets.O365_INVESTER_ACCOUNT }}
+          ICLOUD_USERNAME: ${{ secrets.ICLOUD_USERNAME }}
+          ICLOUD_APP_PASSWORD: ${{ secrets.ICLOUD_APP_PASSWORD }}
+        run: python sync.py
