@@ -36,3 +36,12 @@ jobs:
           ICLOUD_USERNAME: ${{ secrets.ICLOUD_USERNAME }}
           ICLOUD_APP_PASSWORD: ${{ secrets.ICLOUD_APP_PASSWORD }}
         run: python sync.py
+
+      - name: Keep-alive Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "last_sync=$(date -u +%Y-%m-%dT%H:%M:%SZ)" > last_sync.txt
+          git add last_sync.txt
+          git commit -m "chore: keep-alive $(date -u +%Y-%m-%d)"
+          git push
